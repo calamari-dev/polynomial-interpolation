@@ -1,14 +1,13 @@
 \documentclass[a4paper]{ltjsarticle}
 
 % LuaTeX
-\usepackage[no-math]{luatexja-fontspec}
-\usepackage[match,deluxe,bold,sourcehan-jp]{luatexja-preset}
+\usepackage[no-math,match,deluxe]{luatexja-preset}
 
 % 基本パッケージ
 \usepackage{graphicx}
 \usepackage[svgnames]{xcolor}
 \usepackage{here}
-\usepackage{amsmath, amssymb, amsthm}
+\usepackage{amsmath,amssymb,amsthm}
 \usepackage{mathtools}
 \usepackage[unicode,hidelinks,pdfusetitle]{hyperref}
 \usepackage{nameref}
@@ -31,8 +30,13 @@
 \date{\today}
 
 % レイアウト操作
-\setsansjfont[BoldFont=Source Han Sans JP Medium]{Source Han Sans JP}
-\renewcommand{\kanjifamilydefault}{\gtdefault}
+\ltjnewpreset{sourcehan-sans-jp}{%
+  sourcehan-jp,
+  mc-l={Source Han Sans JP Light},
+  mc-m={Source Han Sans JP Normal},
+  mc-b={Source Han Sans JP Medium}}
+
+\ltjapplypreset{sourcehan-sans-jp}
 
 % 参照
 \crefname{theorem}{定理}{定理}
@@ -78,7 +82,7 @@
 
 \section{はじめに}
 計算機上で関数を扱うには，関数をよく知られた扱いやすい関数で近似できると何かと便利である．
-中でも扱いやすい関数は多項式関数であろう．$+$と$\times$の２つの演算さえ実行できれば計算でき，
+中でも扱いやすい関数は多項式関数であろう．$+$と$\times$の2つの演算さえ実行できれば計算でき，
 しかも，曲線として表現できる幅もそれなりに広い．本稿では，この多項式関数によって，種種の計算を近似的に行う方法を紹介する．
 
 \section{補間多項式}
@@ -87,19 +91,19 @@
 
 \begin{theorem}{補間多項式の一意存在性}{interpolation}
   実数の組$P_1 = (p_1, q_1), \dots, P_n = (p_n, q_n)$は，$i \neq j$なら必ず$p_i \neq p_j$を満たすとする．
-  このとき，任意の$i = 1,\dots,n$について変数$x$に$p_i$を代入した値が$q_i$であり，かつ次数が$n-1$以下である多項式$f(x)$がただ１つ存在する．
+  このとき，任意の$i = 1,\dots,n$について変数$x$に$p_i$を代入した値が$q_i$であり，かつ次数が$n-1$以下である多項式$f(x)$がただ1つ存在する．
 \end{theorem}
 
 \begin{proof}
   まず存在性を示す．$i=1,\dots,n$に対し，多項式$g_i(x)$を
   \[
-    g_i(x) = (x-p_1) \cdots (x-p_{i-1})(x-p_{i+1}) \cdots (x-p_n)
+    g_i(x) = (x-p_1) \dotsm (x-p_{i-1})(x-p_{i+1}) \dotsm (x-p_n)
   \]
   で定義する．このとき
   \[
     g_i(p_j) = {
       \begin{cases}
-        (p_j-p_1) \cdots (p_j-p_{i-1})(p_j-p_{i+1}) \cdots (p_j-p_n) & (j = i) \\
+        (p_j-p_1) \dotsm (p_j-p_{i-1})(p_j-p_{i+1}) \dotsm (p_j-p_n) & (j = i) \\
         0 & (j \neq i)
       \end{cases}
       \quad
@@ -108,25 +112,25 @@
   \]
   である．仮定により$i \neq j$なら$p_i \neq p_j$なので，$g_i (p_i) \neq 0$である．したがって
   \[
-    f(x) = q_1h_1(x) + \cdots + q_nh_n(x),
+    f(x) = q_1h_1(x) + \dots + q_nh_n(x),
     \quad
     h_i(x) = \frac{1}{g_i(p_i)} g_i(x)
   \]
   により多項式$f(x), h_1(x), \dots, h_n(x)$を定義すれば
   \begin{align*}
     f(p_i)
-    &= q_1h_1(p_i) + \cdots + q_nh_n(p_i) \\
-    &= q_10 + \cdots + q_{i-1}0 + q_i\pqty*{\frac{1}{g_i(p_i)} g_i(p_i)} + q_{i+1}0 + \cdots + q_n0 \\
+    &= q_1h_1(p_i) + \dots + q_nh_n(p_i) \\
+    &= q_10 + \dots + q_{i-1}0 + q_i\pqty*{\frac{1}{g_i(p_i)} g_i(p_i)} + q_{i+1}0 + \dots + q_n0 \\
     &= q_i
   \end{align*}
   となる．$h_1(x), \dots, h_n(x)$の次数は$n-1$次なので，これらの定数倍の和である$f(x)$の次数は最大でも$n-1$である．
 
   次に一意性を示す．多項式$f_1(x), f_2(x)$はともに次数が$n-1$以下であり，かつすべての$i = 1, \dots, n$に対して$q_i = f_1(p_i) = f_2(p_i)$を満たすとする．
   $g(x) = f_1(x) - f_2(x)$で多項式$g(x)$を定義すると，$g(x)$の次数も$n-1$以下である．
-  また，$x = p_1, \dots, p_n$のとき$g(x) = 0$であり，$p_1,\dots,p_n$はどの２つも相異なるので，因数定理により$g(x)$は$x-p_1,\dots,x-p_n$を因数に持つ．
+  また，$x = p_1, \dots, p_n$のとき$g(x) = 0$であり，$p_1,\dots,p_n$はどの2つも相異なるので，因数定理により$g(x)$は$x-p_1,\dots,x-p_n$を因数に持つ．
   すなわち，$g(x)$は多項式$A(x)$によって
   \[
-    g(x) = A(x)(x-p_1) \cdots (x-p_n)
+    g(x) = A(x)(x-p_1) \dotsm (x-p_n)
   \]
   と書ける．$g(x)$の次数は$n-1$以下なので，この等式が成り立つには$A(x) = 0$でなければならない．よって$g(x) = 0$であるので，$f_1(x) = f_2(x)$が示された．
 \end{proof}
@@ -140,7 +144,7 @@
 \end{definition}
 \footnotetext{$\prod$は総乗記号であり，$\sum$の$+$を$\times$に置き換えたものである．この場合は$k=1,\dots,i-1,i+1,\dots,n$について積をとる．}
 
-\begin{example}[補間多項式の例１]
+\begin{example}[補間多項式の例1]
   \label{example:lagrange_1}
   $(p_1,q_1)=(1,4),(p_2,q_2)=(3,0),(p_3,q_3)=(4,1)$のとき，補間多項式は
   \[
@@ -151,7 +155,7 @@
   である．
 \end{example}
 
-\begin{example}[補間多項式の例２]
+\begin{example}[補間多項式の例2]
   \label{example:lagrange_2}
   $(p_1,q_1)=(1,6),(p_2,q_2)=(5,2),(p_3,q_3)=(4,3)$のとき，補間多項式は
   \[
@@ -207,21 +211,21 @@
 \cref{theorem:interpolation}の状況で，$k=1,\dots,n$に対して，点$P_1,\dots,P_k$に関する補間多項式を$f_k(x)$とする．
 $g_k(x) = f_k(x) - f_{k-1}(x)$とおくと，$i = 1,\dots,k-1$について$g_k(p_i)=0$である．$g_k(x)$の次数は最大でも$k-1$なので，因数定理により
 \[
-  g_k(x) = A_{k-1}(x-p_1)\cdots (x-p_{k-1})
+  g_k(x) = A_{k-1}(x-p_1)\dotsm (x-p_{k-1})
 \]
 を満たす実数$A_{k-1}$が存在する．
 
 したがって
 \begin{align*}
-  f_n(x) - f_{n-1}(x) &= A_{n-1}(x-p_1)\cdots (x-p_{n-2})(x-p_{n-1}) \\
-  f_{n-1}(x) - f_{n-2}(x) &= A_{n-2}(x-p_1)\cdots (x-p_{n-2}) \\
+  f_n(x) - f_{n-1}(x) &= A_{n-1}(x-p_1)\dotsm (x-p_{n-2})(x-p_{n-1}) \\
+  f_{n-1}(x) - f_{n-2}(x) &= A_{n-2}(x-p_1)\dotsm (x-p_{n-2}) \\
   &\vdots \\
   f_2(x) - f_1(x) &= A_1(x-p_1) \\
   f_1(x) &= q_1
 \end{align*}
 である．すべて足すことで
 \[
-  f(x) = f_n(x) = q_1 + \sum_{k=1}^{n-1} A_k(x-p_1)\cdots (x-p_k)
+  f(x) = f_n(x) = q_1 + \sum_{k=1}^{n-1} A_k(x-p_1)\dotsm (x-p_k)
 \]
 を得る．以上により，\cref{definition:lagrange}の補間多項式$f(x)$は，$n-1$個の実数$A_1,\dots,A_{n-1}$により上のように表せることが分かる．
 また，この式に現れる$\sum$を$k=l-1$までで打ち切った多項式は$f_l(x)$であり，点$P_1,\dots,P_l$に関する補間多項式になっている．
@@ -230,7 +234,7 @@ $g_k(x) = f_k(x) - f_{k-1}(x)$とおくと，$i = 1,\dots,k-1$について$g_k(p
 \begin{theorem}{}{weak_newton}
   \cref{theorem:interpolation}の状況で，任意の$l=1,\dots,n$について多項式
   \[
-    q_1 + \sum_{k=1}^{l-1} A_k(x-p_1)\cdots (x-p_k)
+    q_1 + \sum_{k=1}^{l-1} A_k(x-p_1)\dotsm (x-p_k)
   \]
   が点$P_1,\dots,P_l$に関する補間多項式となるような実数$A_1,\dots,A_{n-1}$が存在する．
 \end{theorem}
@@ -261,7 +265,7 @@ $g_k(x) = f_k(x) - f_{k-1}(x)$とおくと，$i = 1,\dots,k-1$について$g_k(p
 \begin{theorem}{ニュートン補間}{newton}
   \cref{theorem:interpolation}の状況で，$f(x)$は次のように表せる．
   \[
-    f(x) = q_1 + \sum_{k=1}^{n-1} [q_1,\dots,q_{k+1}] (x-p_1) \cdots (x-p_k)
+    f(x) = q_1 + \sum_{k=1}^{n-1} [q_1,\dots,q_{k+1}] (x-p_1) \dotsm (x-p_k)
   \]
 \end{theorem}
 
@@ -279,17 +283,17 @@ $g_k(x) = f_k(x) - f_{k-1}(x)$とおくと，$i = 1,\dots,k-1$について$g_k(p
   \]
   である．\cref{theorem:weak_newton}により，$f(x)$は実数$A_1,\dots,A_{n-1}$によって
   \[
-    f(x) = q_1 + \sum_{k=1}^{n-1} A_k(x-p_1)\cdots (x-p_k)
+    f(x) = q_1 + \sum_{k=1}^{n-1} A_k(x-p_1)\dotsm (x-p_k)
   \]
   と書けるが，この$n-1$次の項の係数は$A_{n-1}$であるので
   \[
-    f(x) = \pqty*{q_1 + \sum_{k=1}^{n-2} A_k(x-p_1)\cdots (x-p_k)} + [q_1,\dots,q_n](x-p_1)\cdots (x-p_{n-1})
+    f(x) = \pqty*{q_1 + \sum_{k=1}^{n-2} A_k(x-p_1)\dotsm (x-p_k)} + [q_1,\dots,q_n](x-p_1)\dotsm (x-p_{n-1})
   \]
-  である．上の第１項は$g(x)$に等しいので，帰納法の仮定により
+  である．上の第1項は$g(x)$に等しいので，帰納法の仮定により
   \begin{align*}
     f(x)
-    &= \pqty*{q_1 + \sum_{k=1}^{n-2} [q_1,\dots,q_{k+1}](x-p_1)\cdots (x-p_k)} + [q_1,\dots,q_n](x-p_1)\cdots (x-p_{n-1}) \\
-    &= q_1 + \sum_{k=1}^{n-1} [q_1,\dots,q_{k+1}](x-p_1)\cdots (x-p_k)
+    &= \pqty*{q_1 + \sum_{k=1}^{n-2} [q_1,\dots,q_{k+1}](x-p_1)\dotsm (x-p_k)} + [q_1,\dots,q_n](x-p_1)\dotsm (x-p_{n-1}) \\
+    &= q_1 + \sum_{k=1}^{n-1} [q_1,\dots,q_{k+1}](x-p_1)\dotsm (x-p_k)
   \end{align*}
   である．よって，$n$個の点に関する補間多項式についても命題は成り立つ．
 \end{proof}
@@ -316,12 +320,12 @@ $f(x)$が十分に滑らかであれば，$x$が$x_1,\dots,x_n$に近いとき$f
 \begin{theorem}{補間多項式による近似の誤差}{lagrange_error}
   上の状況で，関数$f(x)$は$n$階微分可能であるとする．このとき，任意の$t\in (x_1,x_n)$に対し
   \[
-    f(t)-p(t) = \frac{f^{(n)} (\xi)}{n!} (t-x_1)\cdots (t-x_n)
+    f(t)-p(t) = \frac{f^{(n)} (\xi)}{n!} (t-x_1)\dotsm (t-x_n)
   \]
   を満たす$\xi \in (x_1, x_n)$が存在する．これにより，$\abs*{f^{(n)}(x)}$が区間$[x_1, x_n]$で最大値を持てば
   \[
     \abs*{f(t)-p(t)}
-    \leqq \max_{x_1\leqq\xi\leqq x_n} \frac{\abs*{f^{(n)}(\xi)}}{n!} \abs*{(t-x_1)\cdots (t-x_n)}
+    \leqq \max_{x_1\leqq\xi\leqq x_n} \frac{\abs*{f^{(n)}(\xi)}}{n!} \abs*{(t-x_1)\dotsm (t-x_n)}
     \leqq \max_{x_1\leqq\xi\leqq x_n} \frac{\abs*{f^{(n)}(\xi)}}{n!} (x_n-x_1)^n
   \]
   である．
@@ -335,7 +339,7 @@ $f(x)$が十分に滑らかであれば，$x$が$x_1,\dots,x_n$に近いとき$f
 \end{lemma}
 
 \begin{proof}
-  どの２つも相異なる$n+1$個の実数$x_1,\dots,x_{n+1} \in I$について$g(x_1) = \cdots = g(x_{n+1}) =0$であるとする．
+  どの2つも相異なる$n+1$個の実数$x_1,\dots,x_{n+1} \in I$について$g(x_1) = \dots = g(x_{n+1}) =0$であるとする．
   $j=1,\dots,n$に対し，$I_{1,j}=[x_j,x_{j+1}], \mathring{I}_{1,j}=(x_j,x_{j+1})$とおく．
   関数$g(x)$は$I_{1,j}$で連続かつ$\mathring{I}_{1,j}$で微分可能なので，平均値の定理により
   \[
@@ -351,20 +355,20 @@ $f(x)$が十分に滑らかであれば，$x$が$x_1,\dots,x_n$に近いとき$f
   を満たす$\xi_{2,j} \in \mathring{I}_{2,j}$が存在する．$\xi_{2,1},\dots,\xi_{2,n-1}$により，さきほどと同様に$n-1$項数列$\xi_2 = \{ \xi_{2,n} \}$を定義する．
 
   以下，これを繰り返すことによって数列$\xi_3,\dots,\xi_n$を定義する．$\xi_j$は$n+1-j$項数列であり，その項に現れる任意の数$a$は$g^{(j)}(a)=0$を満たす．
-  よって，特に$j=n$のとき$\xi_n$は項をただ１つもち，その項$\xi$は$g^{(n)}(\xi)=0$を満たす．
+  よって，特に$j=n$のとき$\xi_n$は項をただ1つもち，その項$\xi$は$g^{(n)}(\xi)=0$を満たす．
 \end{proof}
 
 以上の補題により，\cref{theorem:lagrange_error}は次のように証明される．
 
 \begin{proof}
-  $t=x_2,\dots,x_{n-1}$のときは$(t-x_1)\cdots (t-x_n)=0$であるから，$\xi$は区間$(x_1,x_n)$上の任意の値にしてよい（たとえば$\xi=(x_1+x_n)/2$とすればよい）．
+  $t=x_2,\dots,x_{n-1}$のときは$(t-x_1)\dotsm (t-x_n)=0$であるから，$\xi$は区間$(x_1,x_n)$上の任意の値にしてよい（たとえば$\xi=(x_1+x_n)/2$とすればよい）．
   そこで，$t$が$x_2,\dots,x_{n-1}$のいずれとも等しくない場合について示す．
   \[
-    g(x) = f(x)-p(x)-a(x-x_1)\cdots (x-x_n)
+    g(x) = f(x)-p(x)-a(x-x_1)\dotsm (x-x_n)
   \]
   とおく．ただし$a$は$g(t)=0$であるように取る．すなわち
   \[
-    a = \frac{f(t)-p(t)}{(t-x_1)\cdots (t-x_n)}
+    a = \frac{f(t)-p(t)}{(t-x_1)\dotsm (t-x_n)}
   \]
   とする．
 
@@ -376,11 +380,11 @@ $f(x)$が十分に滑らかであれば，$x$が$x_1,\dots,x_n$に近いとき$f
   である．$p(x)$の次数は最大でも$n-1$なので$p^{(n)}(\xi)=0$であり
   \[
     a = \frac{f^{(n)}(\xi)}{n!}
-    \quad\therefore\, f(t)-p(t)-\frac{f^{(n)}(\xi)}{n!}(t-x_1)\cdots (t-x_n) = g(t) = 0
+    \quad\therefore\, f(t)-p(t)-\frac{f^{(n)}(\xi)}{n!}(t-x_1)\dotsm (t-x_n) = g(t) = 0
   \]
   となる．したがって
   \[
-    f(t)-p(t) = \frac{f^{(n)}(\xi)}{n!}(t-x_1)\cdots (t-x_n)
+    f(t)-p(t) = \frac{f^{(n)}(\xi)}{n!}(t-x_1)\dotsm (t-x_n)
   \]
   である．後半は明らか．
 \end{proof}
@@ -438,12 +442,12 @@ $f(x)$が十分に滑らかであれば，$x$が$x_1,\dots,x_n$に近いとき$f
 \section{数値微分}
 \subsection{数値微分}
 関数を補間多項式で近似できるのなら，ある点における微分係数もまた，補間多項式の微分係数で近似できると考えられる．
-すなわち，実数$x_1,\dots,x_n$はどの２つも相異なり，$t$が$x_1,\dots,x_n$に十分近いとき，
+すなわち，実数$x_1,\dots,x_n$はどの2つも相異なり，$t$が$x_1,\dots,x_n$に十分近いとき，
 点$(x_1,f(x_1)),\dots,(x_n,f(x_n))$に関する補間多項式を$p(x)$とすると$f'(t) \fallingdotseq p'(t)$であると考えられる．
 
 このような微分の近似を数値微分という．数値微分をするときは$x_1,\dots,x_n$を等間隔に取ることが多い．以下にこの場合の例を示す．
 
-\begin{example}[数値微分の例１]
+\begin{example}[数値微分の例1]
   \label{example:numerical_derivative_1}
   $n=2$かつ$(x_1,x_2)=(t,t+h)$のとき
   \[
@@ -456,7 +460,7 @@ $f(x)$が十分に滑らかであれば，$x$が$x_1,\dots,x_n$に近いとき$f
   である．$h\to 0$においては，この式の右辺は厳密に$f'(t)$と等しくなる．
 \end{example}
 
-\begin{example}[数値微分の例２]
+\begin{example}[数値微分の例2]
   \label{example:numerical_derivative_2}
   $n=3$かつ$(x_1,x_2,x_3)=(t-h,t,t+h)$のとき
   \[
@@ -517,7 +521,7 @@ $f(x)$が十分に滑らかであれば，$x$が$x_1,\dots,x_n$に近いとき$f
   \caption{数値微分の比較}
 \end{figure}
 
-図は，２つの直線
+図は，2つの直線
 \begin{align*}
   l_1 &\colon\, y = \frac{f(t+h)-f(t)}{h} (x - t) + f(t) \\
   l_2 &\colon\, y = \frac{f(t+h)-f(t-h)}{(t+h)-(t-h)} (x - (t-h)) + f(t-h)
@@ -597,7 +601,7 @@ $f(x)$が十分に滑らかであれば，$x$が$x_1,\dots,x_n$に近いとき$f
     \abs*{\int_a^b f(x) \dd{x} - \int_a^b p(x) \dd{x}}
     \leqq \max_{a\leqq\xi\leqq b} \frac{\abs*{f^{(2)}(\xi)}}{2} (b-a)^3
   \]
-  と評価できる．なお，台計則は２点$(a,f(a)),(b,f(b))$に関する補間多項式を利用しているので，$1$次以下の多項式関数に関しては（\cref{theorem:interpolation}により）厳密な値を与える．
+  と評価できる．なお，台計則は2点$(a,f(a)),(b,f(b))$に関する補間多項式を利用しているので，$1$次以下の多項式関数に関しては（\cref{theorem:interpolation}により）厳密な値を与える．
 
   なお，本稿では示さないが，もう少し厳しく
   \[
@@ -812,7 +816,7 @@ $f(x)$が十分に滑らかであれば，$x$が$x_1,\dots,x_n$に近いとき$f
   \]
   を満たす$\xi \in \mathring{I}$が存在する．
 
-  次に，ある$l<n$での成立を仮定する．すなわち，$l$個の実数$\xi_1, \dots, \xi_l \in \mathring{I}$（ただし$\xi_1 < \cdots < \xi_l$とする）が存在して，$f^{(l)}(\xi_1) = \cdots = f^{(l)}(\xi_l) = 0$を満たすとする．
+  次に，ある$l<n$での成立を仮定する．すなわち，$l$個の実数$\xi_1, \dots, \xi_l \in \mathring{I}$（ただし$\xi_1 < \dots < \xi_l$とする）が存在して，$f^{(l)}(\xi_1) = \dots = f^{(l)}(\xi_l) = 0$を満たすとする．
   このとき，$\xi_0 = -1, \xi_{l+1} = 1$とおくと，平均値の定理により$k=0,\dots,l$に対し
   \[
     f^{(l+1)}(\xi'_k) = \frac{f^{(l)}(\xi_k) - f^{(l)}(\xi_{k+1})}{\xi_k - \xi_{k+1}} = \frac{0 - 0}{\xi_k - \xi_{k+1}} = 0
@@ -1061,7 +1065,7 @@ $f(x)$が十分に滑らかであれば，$x$が$x_1,\dots,x_n$に近いとき$f
 
 点$t$のまわりで$n$階微分可能な関数$f(x)$に対して，次の多項式を$n$次のテイラー多項式という．
 \[
-  p_n(x)=\sum_{k=0}^n \frac{f^{(k)}(t)}{k!} (x-t)^k=f(t)+f'(t)(x-t)+\cdots+\frac{f^{(n)}(t)}{n!} (x-t)^n
+  p_n(x)=\sum_{k=0}^n \frac{f^{(k)}(t)}{k!} (x-t)^k=f(t)+f'(t)(x-t)+\dots+\frac{f^{(n)}(t)}{n!} (x-t)^n
 \]
 
 関数$f(x)$が点$t$のまわりでテイラー展開可能であるとは，定義域における任意の$x$で
@@ -1099,7 +1103,7 @@ $f(x)$が十分に滑らかであれば，$x$が$x_1,\dots,x_n$に近いとき$f
 以下では一般の$n$についても，補間多項式がテイラー多項式の近似と見なせることを示す．
 
 \begin{theorem}{差商に対する平均値の定理}{divdif_mean}
-  実数$x_1,\dots,x_{n+1}$はどの２つも相異なるとし，$x_1,\dots,x_{n+1}$の中で最小のものを$m$，最大のものを$M$とおく．
+  実数$x_1,\dots,x_{n+1}$はどの2つも相異なるとし，$x_1,\dots,x_{n+1}$の中で最小のものを$m$，最大のものを$M$とおく．
   また，関数$f(x)$は区間$I = [m, M]$で$n$階微分可能であるとする．
   このとき，次式を満たす$\xi \in (m, M)$が存在する．
   \[
@@ -1113,7 +1117,7 @@ $f(x)$が十分に滑らかであれば，$x$が$x_1,\dots,x_n$に近いとき$f
   したがって，\cref{lemma:zero_existance}により$g^{(n)}(\xi)=0$を満たす$\xi\in (m, M)$が存在する．
   ここで，$p(x)$は\cref{theorem:newton}により
   \[
-    p(x) = f(x_1) + \sum_{k=1}^{n} f[x_1,\dots,x_{k+1}] (x-x_1) \cdots (x-x_k)
+    p(x) = f(x_1) + \sum_{k=1}^{n} f[x_1,\dots,x_{k+1}] (x-x_1) \dotsm (x-x_k)
   \]
   と表せる．よって$p^{(n)}(x) = f[x_1,\dots,x_{n+1}]n!$であり
   \[
@@ -1126,11 +1130,11 @@ $f(x)$が十分に滑らかであれば，$x$が$x_1,\dots,x_n$に近いとき$f
 
 関数$f(x)$はある開区間$\mathring{I}$で$n$階微分可能かつ，$n$次導関数$f^{(n)}(x)$は$\mathring{I}$で連続とする．
 $t=x_{n+1}\in\mathring{I}$をある定数とし，実数$s=x_1\in\mathring{I}$は$s<t$を満たすとする．$J=[s,t]$とおく．
-$n$個の実数$x_1,\dots,x_n \in J$はすべて$s$の関数であり，任意の$s$について$x_1,\dots,x_{n+1}$はどの２つも相異なるものとする．
+$n$個の実数$x_1,\dots,x_n \in J$はすべて$s$の関数であり，任意の$s$について$x_1,\dots,x_{n+1}$はどの2つも相異なるものとする．
 
 点$(x_1,f(x_1)),\dots,(x_{n+1},f(x_{n+1}))$に関する補間多項式を$p(x)$とおくと，$p(x)$は
 \[
-  p(x) = f(x_1) + \sum_{k=1}^n f[x_1,\dots,x_{k+1}] (x-x_1) \cdots (x-x_k)
+  p(x) = f(x_1) + \sum_{k=1}^n f[x_1,\dots,x_{k+1}] (x-x_1) \dotsm (x-x_k)
 \]
 と書ける．\cref{theorem:divdif_mean}により，各$f[x_1,\dots,x_{k+1}]$に対して
 \[
@@ -1145,7 +1149,7 @@ $n$個の実数$x_1,\dots,x_n \in J$はすべて$s$の関数であり，任意�
 \]
 が成り立つ．したがって，任意の実数$x$について
 \[
-  p(x)=f(x_1)+\sum_{k=1}^n f[x_1,\dots,x_{k+1}](x-x_1)\cdots (x-x_k)\to f(t)+ \sum_{k=1}^n \frac{f^{(k)}(t)}{k!} (x-t)^k \plimas{s\to t-0}
+  p(x)=f(x_1)+\sum_{k=1}^n f[x_1,\dots,x_{k+1}](x-x_1)\dotsm (x-x_k)\to f(t)+ \sum_{k=1}^n \frac{f^{(k)}(t)}{k!} (x-t)^k \plimas{s\to t-0}
 \]
 である．これにより$p(x)\to p_n(x)\plimas{s\to t-0}$であるので，$s$と$t$が十分に近ければ$p(x)\fallingdotseq p_n(x)$であり，
 補間多項式をテイラー多項式の近似と見なせることが確かめられた．
