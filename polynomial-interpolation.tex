@@ -1,8 +1,8 @@
 \documentclass[a4paper]{ltjsarticle}
 
 % LuaTeX
-\usepackage{luatexja-fontspec}
-\usepackage[no-math,match,deluxe,sourcehan-jp]{luatexja-preset}
+\usepackage[no-math]{luatexja-fontspec}
+\usepackage[match,deluxe,bold,sourcehan-jp]{luatexja-preset}
 
 % 基本パッケージ
 \usepackage{graphicx}
@@ -71,7 +71,6 @@
 \newcommand{\dd}[1]{\dl2#1}
 \newcommand{\plimas}[1]{\pod{#1}}
 \newcommand{\degree}[1]{{#1}^\circ}
-\newcommand{\zahl}{\mathbb{Z}}
 
 \begin{document}
 \maketitle
@@ -962,11 +961,11 @@ $f(x)$が十分に滑らかであれば，$x$が$x_1,\dots,x_n$に近いとき$f
   $L_3(x)$の根$x_1,x_2,x_3\,(x_1<x_2<x_3)$は，方程式$L_3(x)=0$を解くことで
   \[
     \frac{1}{2} (5x^3 - 3x) = 0 \quad\therefore\,
-    x_1 = -\sqrt{\frac{3}{5}}, x_2 = 0, x_3 = \sqrt{\frac{3}{5}}
+    x_1 = -\sqrt{\frac{3}{5}},\, x_2 = 0,\, x_3 = \sqrt{\frac{3}{5}}
   \]
   と分かる．$x_1,x_2,x_3$に対応する重みはそれぞれ
   \[
-    w_1 = \frac{5}{9}, w_2 = \frac{8}{9}, w_3 = \frac{5}{9}
+    w_1 = \frac{5}{9},\, w_2 = \frac{8}{9},\, w_3 = \frac{5}{9}
   \]
   である．したがって，ガウス・ルジャンドル公式によれば$f(x)=2e^{2x-1}$とすると
   \[
@@ -1160,7 +1159,7 @@ $n$個の実数$x_1,\dots,x_n \in J$はすべて$s$の関数であり，任意�
   \item[2021.03.31] 初版
   \item[2021.04.08] 補遺「補間多項式とテイラー多項式の関係」を追加
   \item[2021.05.11] 誤字・脱字を修正
-  \item[2021.05.27] \LaTeX ソースの不備を修正
+  \item[2021.05.28] \LaTeX ソースの不備を修正
 \end{enumerate}
 
 \end{document}
